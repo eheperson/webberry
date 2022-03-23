@@ -1,30 +1,31 @@
 # pull official base image
-FROM python:3.9.6-alpine
-
-# set work directory
-RUN mkdir app
-WORKDIR /app
-
+FROM python:3.9.6-slim
+ARG REPO_PATH
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# install psycopg2 dependencies
-RUN apk update \
-    && apk add postgresql-dev gcc python3-dev musl-dev
+# set the working directory
+RUN mkdir app
+WORKDIR /app
+# copy project
+COPY $REPO_PATH /app
 
-# install dependencies
+RUN apt-get update
+RUN apt-get install gcc -y
+# Install Postgres
+RUN apt-get install libpq-dev -y
+# install netcat : for the nc command in entrypoin.sh
+RUN apt-get install -y netcat
+
+# copy and install dependencies
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
 # copy entrypoint.sh
-COPY ./entrypoint.sh .
-RUN sed -i 's/\r$//g' /app/entrypoint.sh
+COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
-
-# copy project
-COPY $REPO_PATH /app
 
 # run entrypoint.sh
 ENTRYPOINT ["/app/entrypoint.sh"]

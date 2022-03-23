@@ -1,7 +1,10 @@
 # Webberry
 
-**Template repository for the dockerized django apps based on postgresql database.**
+**Template repository for the dockerized django apps based on postgresql database..**
 
+> `/app/main` directory created by `'$ django-admin startproject main'` command. You can use this project as your main project or just remove it and create new one.
+
+> Default admin user is : `username: 'admin', password: '123456@@' ` for the django admin panel. 
 ___
 ## Preparing : 
 
@@ -57,16 +60,16 @@ To remove the volumes along with the containers :
 
 ```
 Ensure the default Django tables were created: 
-    $ docker-compose exec db psql --username=hello_django --dbname=hello_django_dev
+    $ docker-compose exec db psql --username=enivicivokki_user --dbname=enivicivokki_db
     # \l
-    # \c hello_django_dev
+    # \c enivicivokki_db
     # \dt
     # \q
 ```
 
 ```
 # You can check that the volume was created as well by running:
-    $ docker volume inspect django-on-docker_postgres_data
+    $ docker volume inspect webberry_postgresql_data
 ```
 
 ```

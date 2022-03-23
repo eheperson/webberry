@@ -23,17 +23,17 @@ services:
     build: 
       context: ./app
       args:
-        REPO_PATH: ./app
+        REPO_PATH: ./
       dockerfile: Dockerfile
     env_file:
       - ./app/.env
     environment:
       - "MIGRATIONS=1"
     volumes:
-      - ./app/:/usr/src/app/
+      - ./app:/app
     ports:
       - "0.0.0.0:8006:8006"
-  #  restart: unless-stopped
+    restart: always
     depends_on:
       - webberry-postgres
     working_dir: /app
@@ -43,7 +43,8 @@ services:
 
 volumes:
   postgresql-data:
+    driver: local
 
 networks:
   webberry-main-net:
-
+    driver: bridge
